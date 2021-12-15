@@ -10,6 +10,7 @@ const Wrapper = styled.div`
 const BookCover = styled.img`
   width: 90%;
   border-radius: 4px;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.07);
 `
 
 const PriceBlock = styled.div`

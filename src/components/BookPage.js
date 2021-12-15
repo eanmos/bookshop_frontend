@@ -23,6 +23,7 @@ const Cover = styled.img`
   margin-right: 30px;
   max-width: fit-content;
   object-fit: contain;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.07);
 `
 
 const InfoBlock = styled.div``

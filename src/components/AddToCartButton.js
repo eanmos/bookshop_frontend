@@ -46,7 +46,7 @@ export default function AddToCartButton({ icon, bookId }) {
   }
 
   if (icon)
-    return <Button onClick={addToCart}><i class="fas fa-shopping-cart" style={{marginRight: "4px"}}></i> В корзину</Button>
+    return <Button onClick={addToCart}><i className="fas fa-shopping-cart" style={{marginRight: "4px"}}></i> В корзину</Button>
   else
     return <Button onClick={addToCart}>В корзину</Button>
 }

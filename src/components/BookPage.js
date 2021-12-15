@@ -153,7 +153,7 @@ export default function BookPage(props) {
 
             <DiscountBlock discount={discount} />
 
-            <AddToCartButton icon={true} />
+            <AddToCartButton icon={true} bookId={id} />
           </CoverColumn>
 
           <InfoBlock>

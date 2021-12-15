@@ -1,11 +1,10 @@
 import React from "react"
-import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import BooksListInCart from 'components/BooksListInCart'
 
 export default function CartBookList({ books }) {
   const getCartBookIds = () => JSON.parse(localStorage.getItem('cart')) || []
-  const getCartBooks = () => getCartBookIds().map((id) => books.find((b) => b.id == id))
+  const getCartBooks = () => getCartBookIds().map((id) => books.find((b) => b.id === id ))
 
   let [cartBooks, setCartBooks] = React.useState(getCartBooks())
 

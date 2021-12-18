@@ -1,6 +1,13 @@
 import React from "react"
 import { toast } from 'react-toastify'
+import styled from 'styled-components'
 import BooksListInCart from 'components/BooksListInCart'
+import MakeOrderPanel from 'components/MakeOrderPanel'
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 export default function CartBookList({ books }) {
   const getCartBookIds = () => JSON.parse(localStorage.getItem('cart')) || []
@@ -25,5 +32,10 @@ export default function CartBookList({ books }) {
     });
   }
 
-  return <BooksListInCart books={cartBooks} deleteBookHandler={deleteBookHandler} />
+  return (
+    <Wrapper>
+      <MakeOrderPanel books={cartBooks} />
+      <BooksListInCart books={cartBooks} deleteBookHandler={deleteBookHandler} />
+    </Wrapper>
+  )
 }

@@ -15,7 +15,7 @@ const BookWrapper = styled.div`
 `
 
 const BookCover = styled.img`
-  width: 90%;
+  width: 100%;
   border-radius: 4px;
 `
 
@@ -72,12 +72,14 @@ const ProfitPercent = styled.span`
   background-color: #7054be;
   padding: 3px 8px;
   color: white;
+  border-radius: 4px 0 0 4px;
 `
 
 const ProfitValue = styled.span`
   border: 1px solid #7054be;
   padding: 2px 8px;
   color: #7054be;
+  border-radius: 0 4px 4px 0;
 `
 
 const DeleteBookFromCartWrapper = styled.div`

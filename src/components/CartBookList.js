@@ -10,14 +10,28 @@ const Wrapper = styled.div`
 `
 
 export default function CartBookList({ books }) {
-  const getCartBookIds = () => JSON.parse(localStorage.getItem('cart')) || []
-  const getCartBooks = () => getCartBookIds().map((id) => books.find((b) => b.id === id ))
+  const getCartBookIdsCount = () => JSON.parse(localStorage.getItem('cart')) || []
+  const getCartBooks = () => getCartBookIdsCount().map((e) => books.find((b) => b.id === e.id ))
 
   let [cartBooks, setCartBooks] = React.useState(getCartBooks())
 
+  const getCartBookCountById = (id) => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || []
+    const b = cart.find((e) => e.id == id)
+    return b ? b.count : 0
+  }
+
+  const calcTotalPrice = (books) => {
+    return books.length > 0 ? books.reduce((x, y) => {
+      return { currentPrice: (x ? x.currentPrice : 0) + (y ? y.currentPrice * getCartBookCountById(y.id) : 0) }
+    }, 0).currentPrice : 0
+  }
+
+  let [totalPrice, setTotalPrice] = React.useState(calcTotalPrice(cartBooks))
+
   const deleteBookHandler = (id) => {
     let cart = JSON.parse(localStorage.getItem('cart')) || []
-    cart = cart.filter(i => i !== id)
+    cart = cart.filter(e => e.id !== id)
     localStorage.setItem('cart', JSON.stringify(cart))
     setCartBooks(getCartBooks())
 
@@ -30,12 +44,19 @@ export default function CartBookList({ books }) {
       draggable: true,
       progress: undefined,
     });
+
+    triggerCartTotalPriceUpdate()
+  }
+
+  const triggerCartTotalPriceUpdate = () => {
+    setCartBooks(getCartBooks())
+    setTotalPrice(calcTotalPrice(cartBooks))
   }
 
   return (
     <Wrapper>
-      <MakeOrderPanel books={cartBooks} />
-      <BooksListInCart books={cartBooks} deleteBookHandler={deleteBookHandler} />
+      <MakeOrderPanel books={cartBooks} totalPrice={totalPrice} />
+      <BooksListInCart books={cartBooks} deleteBookHandler={deleteBookHandler} triggerCartTotalPriceUpdate={triggerCartTotalPriceUpdate} />
     </Wrapper>
   )
 }

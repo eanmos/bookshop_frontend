@@ -31,7 +31,7 @@ export default function AddToCartButton({ icon, bookId }) {
       return
 
     let cart = JSON.parse(localStorage.getItem('cart')) || []
-    cart.push(bookId)
+    cart.push({ id: bookId, count: 1 })
     localStorage.setItem('cart', JSON.stringify(cart))
 
     toast.success('Товар успешно добавлен в корзину', {

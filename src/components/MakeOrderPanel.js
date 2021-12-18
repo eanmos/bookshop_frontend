@@ -41,17 +41,13 @@ const TotalPriceLabel = styled.p`
   color: #393939;
 `
 
-export default function MakeOrderPanel({ books }) {
-  const totalPrice = books.reduce((x, y) => {
-    return { currentPrice: (x ? x.currentPrice : 0) + (y ? y.currentPrice : 0) }
-  }, 0)
-
+export default function MakeOrderPanel({ books, totalPrice }) {
   if (totalPrice === 0)
     return <></>
 
   return (
     <Wrapper>
-      <TotalPriceLabel>Заказ на сумму {totalPrice.currentPrice} ₽</TotalPriceLabel>
+      <TotalPriceLabel>Заказ на сумму {totalPrice} ₽</TotalPriceLabel>
       <MakeOrderButton>Оформить</MakeOrderButton>
     </Wrapper>
   )

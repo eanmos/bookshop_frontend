@@ -1,6 +1,8 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
+import BookCountControl from 'components/BookCountControl'
 
 const Wrapper = styled.div`
   margin-left: 30px;
@@ -133,8 +135,49 @@ function DeleteBookFromCart({ bookId, deleteBookHandler }) {
   )
 }
 
-function Book({ book, deleteBookHandler }) {
-    const { id, cover, currentPrice, oldPrice, discount, title, author } = book
+function Book({ book, deleteBookHandler, triggerCartTotalPriceUpdate }) {
+    const { id, cover, currentPrice, oldPrice, discount, title, author, count } = book
+
+    const getCartBookCountById = () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || []
+      const b = cart.find((e) => e.id == id)
+      return b ? b.count : 0
+    }
+
+    const incrementCartBookCountById = () => {
+      let cart = JSON.parse(localStorage.getItem('cart')) || []
+      let cartBookIndex = cart.findIndex((e) => e.id == id)
+
+      if (cart[cartBookIndex].count + 1 <= count) {
+        cart[cartBookIndex].count++
+      } else {
+        toast.info('Больше экземпляров нет', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart))
+      triggerCartTotalPriceUpdate()
+    }
+
+    const decrementCartBookCountById = () => {
+      let cart = JSON.parse(localStorage.getItem('cart')) || []
+      let cartBookIndex = cart.findIndex((e) => e.id == id)
+
+      if (cart[cartBookIndex].count - 1 > 0) {
+        cart[cartBookIndex].count--
+        localStorage.setItem('cart', JSON.stringify(cart))
+        triggerCartTotalPriceUpdate()
+      } else {
+        deleteBookHandler(id)
+      }
+    }
 
     return (
       <BookWrapper>
@@ -154,14 +197,20 @@ function Book({ book, deleteBookHandler }) {
         <Author>{author}</Author>
 
         <DeleteBookFromCart bookId={id} deleteBookHandler={deleteBookHandler} />
+
+        <BookCountControl
+          book={book}
+          increment={incrementCartBookCountById}
+          decrement={decrementCartBookCountById}
+          getCurrentCount={getCartBookCountById} />
       </BookWrapper>
     )
 }
 
-export default function BooksListInCart({ books, deleteBookHandler }) {
+export default function BooksListInCart({ books, deleteBookHandler, triggerCartTotalPriceUpdate }) {
     return (
       <Wrapper>
-        { books.map((e, i) => <Book deleteBookHandler={deleteBookHandler} key={i} book={e} />) }
+        { books.map((e, i) => <Book deleteBookHandler={deleteBookHandler} triggerCartTotalPriceUpdate={triggerCartTotalPriceUpdate} key={i} book={e} />) }
       </Wrapper>
     )
 }

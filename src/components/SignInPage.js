@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -39,7 +40,7 @@ const Header = styled.h1`
   color: #222;
   margin-top: 0;
 `
-const Form = styled.form`
+const Form = styled.div`
   margin: 0 auto;
   width: 90%;
   padding: 0;
@@ -111,24 +112,65 @@ const StyledLink = styled(Link)`
 `
 
 export default function SignInPage() {
+  const signIn = async () => {
+    const response = await fetch("/signIn", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      })
+    })
+
+    const json = JSON.parse(await response.json())
+
+    if (json.success) {
+      toast.success('Вход в аккаунт успешен', {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
+      // Do client-side redirect after time-out so user can read the toast
+      // const timeout = (delay) => new Promise(res => setTimeout(res, delay))
+      // await timeout(1300)
+      // window.location = "/"
+    } else {
+      toast.error('Неверный логин или пароль', {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }
+
   return (
     <>
       <GlobalStyle />
       <Wrapper>
         <Header>Войти</Header>
 
-        <Form method="post" action="/signIp">
+        <Form>
           <InputWrapper>
-            <Label for="email">Электронная почта</Label>
+            <Label htmlFor="email">Электронная почта</Label>
             <Input autocomplete="off" required spellcheck="off" id="email" type="email" name="username" />
           </InputWrapper>
 
           <InputWrapper>
-            <Label for="password">Пароль</Label>
+            <Label htmlFor="password">Пароль</Label>
             <Input autocomplete="off" required spellcheck="off" id="password" type="password" name="password" />
           </InputWrapper>
 
-          <SignInButton type="submit" value="Войти">
+          <SignInButton onClick={signIn} value="Войти">
             Войти
           </SignInButton>
 

@@ -1,5 +1,6 @@
 import React from "react"
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -38,7 +39,7 @@ const Header = styled.h1`
   color: #222;
   margin-top: 0;
 `
-const Form = styled.form`
+const Form = styled.div`
   margin: 0 auto;
   width: 90%;
   padding: 0;
@@ -106,29 +107,62 @@ const Copyright = styled.p`
 `
 
 export default function SignUpPage() {
+  const signUp = async () => {
+    const response = await fetch("/signUp", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      })
+    })
+
+    const json = await response.json()
+
+    // TODO: check if such user alredy exists
+
+    if (json.status === "ok") {
+      toast.success('Регистрация прошла успешно', {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
+      // Do client-side redirect after time-out so user can read the toast
+      // const timeout = (delay) => new Promise(res => setTimeout(res, delay))
+      // await timeout(1300)
+      // window.location = "/signIn"
+    }
+  }
+
   return (
     <>
       <GlobalStyle />
       <Wrapper>
         <Header>Регистрация</Header>
 
-        <Form method="post" action="/signUp">
+        <Form>
           <InputWrapper>
-            <Label for="username">Имя</Label>
+            <Label htmlFor="username">Имя</Label>
             <Input autocomplete="off" required spellcheck="off" id="username" type="text" name="username" />
           </InputWrapper>
 
           <InputWrapper>
-            <Label for="email">Электронная почта</Label>
+            <Label htmlFor="email">Электронная почта</Label>
             <Input autocomplete="off" required spellcheck="off" id="email" type="email" name="username" />
           </InputWrapper>
 
           <InputWrapper>
-            <Label for="password">Пароль</Label>
+            <Label htmlFor="password">Пароль</Label>
             <Input autocomplete="off" required spellcheck="off" id="password" type="password" name="password" />
           </InputWrapper>
 
-          <SignUpButton type="submit" value="Зарегистрироваться">
+          <SignUpButton onClick={signUp} value="Зарегистрироваться">
             Зарегистрироваться
           </SignUpButton>
         </Form>

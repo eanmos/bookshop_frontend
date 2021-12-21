@@ -9,6 +9,7 @@ import SignInPage from "components/SignInPage"
 import SignUpPage from "components/SignUpPage"
 import CartPage from "components/CartPage"
 import BookPage from "components/BookPage"
+import ProfilePage from "components/ProfilePage"
 
 import "./index.css"
 
@@ -29,6 +30,7 @@ import "./index.css"
 		<Route path="/signIn" element={ <SignInPage /> } />
 		<Route path="/signUp" element={ <SignUpPage /> } />
 		<Route path="/cart" element={ <CartPage books={books} /> } />
+		<Route path="/profile" element={ <ProfilePage /> } />
 		<Route path="/books/:bookId" element={ <BookPage books={books} /> } />
 	      </Routes>
 	    </BrowserRouter>

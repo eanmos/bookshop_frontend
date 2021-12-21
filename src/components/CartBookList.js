@@ -22,9 +22,11 @@ export default function CartBookList({ books }) {
   }
 
   const calcTotalPrice = (books) => {
+    const getPrice = (b) => b.discount ? b.discount.price : b.price
+
     return books.length > 0 ? books.reduce((x, y) => {
-      return { currentPrice: (x ? x.currentPrice : 0) + (y ? y.currentPrice * getCartBookCountById(y.id) : 0) }
-    }, 0).currentPrice : 0
+      return { price: (x ? getPrice(x) : 0) + (y ? getPrice(y) * getCartBookCountById(y.id) : 0) }
+    }, 0).price : 0
   }
 
   let [totalPrice, setTotalPrice] = React.useState(calcTotalPrice(cartBooks))

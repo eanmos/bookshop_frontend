@@ -124,7 +124,7 @@ export default function BookPage(props) {
     const params = useParams()
     // eslint-disable-next-line
     const book = props.books.find((b) => b.id == params.bookId)
-    const {
+    let {
       id,
       cover,
       currentPrice,
@@ -132,12 +132,21 @@ export default function BookPage(props) {
       discount,
       title,
       author,
-      description,
+      annotation,
       isbn,
       pageCount,
       weight,
-      dimensions
+      dimensions,
+      price
     } = book
+
+    if (discount) {
+      currentPrice = discount.price
+      oldPrice = price
+    } else {
+      currentPrice = price
+      oldPrice = null
+    }
 
     return (
       <Wrapper>
@@ -160,7 +169,7 @@ export default function BookPage(props) {
           <InfoBlock>
             <Title>{title}</Title>
             <Author>{author}</Author>
-            <Description>{description}</Description>
+            <Description>{annotation}</Description>
 
             <SecondaryInfoLine name="ID товара" value={id} />
             <SecondaryInfoLine name="ISBN" value={isbn} />

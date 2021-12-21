@@ -97,7 +97,15 @@ function OldPrice({ oldPrice }) {
 }
 
 export default function Book({ book }) {
-    const { id, cover, currentPrice, oldPrice, discount, title, author } = book
+    let { id, cover, price, currentPrice, oldPrice, discount, title, author } = book
+
+    if (discount) {
+      currentPrice = discount.price
+      oldPrice = price
+    } else {
+      currentPrice = price
+      oldPrice = null
+    }
 
     return (
       <Wrapper>

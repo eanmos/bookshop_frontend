@@ -136,7 +136,16 @@ function DeleteBookFromCart({ bookId, deleteBookHandler }) {
 }
 
 function Book({ book, deleteBookHandler, triggerCartTotalPriceUpdate }) {
-    const { id, cover, currentPrice, oldPrice, discount, title, author, count } = book
+    const { id, cover, discount, title, author, count, price } = book
+    let currentPrice, oldPrice
+
+    if (discount) {
+      currentPrice = discount.price
+      oldPrice = price
+    } else {
+      currentPrice = price
+      oldPrice = null
+    }
 
     const getCartBookCountById = () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || []

@@ -9,16 +9,14 @@ const Wrapper = styled(Link)`
   justify-content: center;
   align-items: center;
 
-  background: rgba(0, 0, 0, 0);
+  background: #ddd;
   border: 1 px solid #c9c9c9;
   box-shadow: none;
   color: #595959;
   filter: none;
-  font: "PT Sans";
-  font: 14px "PT Sans";
+  font-size: 24px;
   border-radius: 4px;
-  border: 1px solid #999;
-  padding: 4px 8px;
+  padding: 5px 8px;
   text-transform: uppercase;
   text-decoration: none;
   margin-right: 8px;
@@ -27,10 +25,9 @@ const Wrapper = styled(Link)`
     background: #ff8700;
     cursor: pointer;
     color: white;
-    border: 1px solid #fc8533;
   }
 `
 
 export default function LoginButton() {
-    return <Wrapper to="/signIn">Войти</Wrapper>
+    return <Wrapper to="/signIn"><i class="fas fa-sign-in-alt"></i></Wrapper>
 }

@@ -134,9 +134,9 @@ export default function SignUpPage() {
       })
 
       // Do client-side redirect after time-out so user can read the toast
-      // const timeout = (delay) => new Promise(res => setTimeout(res, delay))
-      // await timeout(1300)
-      // window.location = "/signIn"
+      const timeout = (delay) => new Promise(res => setTimeout(res, delay))
+      await timeout(1300)
+      window.location = "/signIn"
     }
   }
 

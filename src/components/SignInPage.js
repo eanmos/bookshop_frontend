@@ -137,9 +137,9 @@ export default function SignInPage() {
       })
 
       // Do client-side redirect after time-out so user can read the toast
-      // const timeout = (delay) => new Promise(res => setTimeout(res, delay))
-      // await timeout(1300)
-      // window.location = "/"
+      const timeout = (delay) => new Promise(res => setTimeout(res, delay))
+      await timeout(1300)
+      window.location = "/"
     } else {
       toast.error('Неверный логин или пароль', {
         position: "bottom-right",

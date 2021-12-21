@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import styled from 'styled-components'
 import SidebarNavigation from "components/SidebarNavigation"
 import LoginButton from "components/LoginButton"
@@ -13,11 +14,39 @@ const SidebarMenuWrapper = styled.div`
   margin-bottom: 15px;
 `
 
+const ProfileButton = styled(Link)`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #ddd;
+  box-shadow: none;
+  color: #595959;
+  filter: none;
+  font-size: 24px;
+  border-radius: 4px;
+  padding: 5px 8px;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-right: 8px;
+
+  &:hover {
+    background: #ff8700;
+    cursor: pointer;
+    color: white;
+  }
+`
+
 function SidebarMenu({ userInfo }) {
-  if (userInfo !== null) {
+	console.log(userInfo)
+  if (userInfo !== null && userInfo !== undefined) {
     return (
       <SidebarMenuWrapper>
-        <div>userInfo.username</div>
+        <ProfileButton to="/profile">
+	    <i class="fas fa-user"></i>
+	</ProfileButton>
         <CartButton />
       </SidebarMenuWrapper>
     )
@@ -40,7 +69,7 @@ export default function Sidebar() {
       const json = JSON.parse(await response.json())
 
       if (json.success)
-        setUserInfo(json.userInfo)
+        setUserInfo({ username: json.username, email: json.email })
       else
         setUserInfo(null)
 
@@ -48,7 +77,7 @@ export default function Sidebar() {
     }
 
     userInfo()
-  })
+  }, [])
 
   return (
     <SidebarWrapper>

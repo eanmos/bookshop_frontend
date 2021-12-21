@@ -100,12 +100,12 @@ function SecondaryInfoLine({ name, value }) {
   }
 }
 
-function DiscountBlock({ discount }) {
+function DiscountBlock({ discount, price }) {
   if (discount) {
     return (
       <DiscountBlockWrapper>
-        <DiscountPercent>{ "−" + discount.percent + "%" }</DiscountPercent>
-        <DiscountDuration>{"ЕЩЕ " + discount.duration + " ДНЯ"}</DiscountDuration>
+        <DiscountPercent>{ "−" + Math.round((price - discount.price) / price * 100) + "%" }</DiscountPercent>
+        <DiscountDuration>{"ЕЩЕ " + discount.date + " ДНЯ"}</DiscountDuration>
       </DiscountBlockWrapper>
     )
   } else {
@@ -161,7 +161,7 @@ export default function BookPage(props) {
               <OldPrice oldPrice={oldPrice}></OldPrice>
             </PriceBlock>
 
-            <DiscountBlock discount={discount} />
+            <DiscountBlock price={price} discount={discount} />
 
             <AddToCartButton icon={true} bookId={id} />
           </CoverColumn>

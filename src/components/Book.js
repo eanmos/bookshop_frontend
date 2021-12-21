@@ -76,12 +76,12 @@ const Author = styled.div`
   }
 `
 
-function DiscountBlock({ discount }) {
+function DiscountBlock({ price, discount }) {
   if (discount) {
     return (
       <DiscountBlockWrapper>
-        <DiscountPercent>{ "−" + discount.percent + "%" }</DiscountPercent>
-        <DiscountDuration>{"ЕЩЕ " + discount.duration + " ДНЯ"}</DiscountDuration>
+        <DiscountPercent>{ "−" + Math.round(((price - discount.price) / price * 100)) + "%" }</DiscountPercent>
+        <DiscountDuration>{"ЕЩЕ " + discount.date + " ДНЯ"}</DiscountDuration>
       </DiscountBlockWrapper>
     )
   } else {
@@ -118,7 +118,7 @@ export default function Book({ book }) {
           <OldPrice oldPrice={oldPrice}></OldPrice>
         </PriceBlock>
 
-        <DiscountBlock discount={discount} />
+        <DiscountBlock price={price} discount={discount} />
 
         <Title to={`/books/${id}`}>{title}</Title>
 

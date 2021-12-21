@@ -111,7 +111,7 @@ function ProfitBlock({ discount, oldPrice, currentPrice }) {
   if (discount) {
     return (
       <ProfitBlockWrapper>
-        <ProfitPercent>{ "−" + discount.percent + "%" }</ProfitPercent>
+        <ProfitPercent>{ "−" + Math.round((oldPrice - currentPrice) / oldPrice * 100) + "%" }</ProfitPercent>
         <ProfitValue>{"Выгода " + (oldPrice - currentPrice) + " ₽" }</ProfitValue>
       </ProfitBlockWrapper>
     )

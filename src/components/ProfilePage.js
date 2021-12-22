@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import styled from 'styled-components'
 import Sidebar from "components/Sidebar"
 
@@ -46,6 +47,10 @@ const OrderWrapper = styled.div`
     cursor: pointer;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.07);
   }
+`
+
+const WrapperLink = styled(Link)`
+  text-decoration: none;
 `
 
 function Order({ order }) {
@@ -105,7 +110,7 @@ export default function ProfilePage(props) {
 	    <Label>🛎️ Ваши заказы, {userInfo.username}</Label>
 	  </TopPanel>
 
-	  { userOrders.map((o, k) => <Order order={o} key={k} />) }
+	  { userOrders.map((o, k) => <WrapperLink to={`/order/${o._id}`}><Order order={o} key={k} /></WrapperLink>) }
         </LeftPanel>
       </Wrapper>
     )

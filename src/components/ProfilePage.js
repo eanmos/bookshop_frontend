@@ -13,7 +13,6 @@ const TopPanel = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   margin-bottom: 15px;
-  width: 100%;
   max-width: 700px;
 `
 
@@ -32,8 +31,48 @@ const Wrapper = styled.div`
   display: flex;
 `
 
+const OrderWrapper = styled.div`
+  border-radius: 4px;
+  margin-left: 30px;
+  background: #fff;
+  padding: 15px;
+  font-size: 20px;
+  color: #393939;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-bottom: 15px;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.07);
+  }
+`
+
+function Order({ order }) {
+  let price = 0
+
+  for (const b of order.books)
+	price += b.count * b.price
+
+  const date = new Date(order.datetime).toLocaleString("ru", { month: 'long', day: 'numeric' })
+
+  return (
+    <OrderWrapper>
+      Заказ от { date } на сумму { price } ₽
+    </OrderWrapper>
+  )
+}
+
 export default function ProfilePage(props) {
   const [userInfo, setUserInfo] = React.useState(null)
+  const [userOrders, setUserOrders] = React.useState(null)
+
+  const getUserOrders = async () => {
+      const response = await fetch("/getUserOrders")
+      const json = await response.json()
+      setUserOrders(json)
+      console.log(json)
+  }
 
   React.useEffect(() => {
     const userInfo = async () => {
@@ -44,15 +83,19 @@ export default function ProfilePage(props) {
         setUserInfo({ username: json.username, email: json.email })
       else
         setUserInfo(null)
-
-      console.log(json)
     }
 
     userInfo()
+    getUserOrders()
   }, [])
+
+  if (userOrders === null)
+    return <></>
 
   if (userInfo === null)
 	return <></>
+
+
 
     return (
       <Wrapper>
@@ -61,6 +104,8 @@ export default function ProfilePage(props) {
 	  <TopPanel>
 	    <Label>🛎️ Ваши заказы, {userInfo.username}</Label>
 	  </TopPanel>
+
+	  { userOrders.map((o, k) => <Order order={o} key={k} />) }
         </LeftPanel>
       </Wrapper>
     )

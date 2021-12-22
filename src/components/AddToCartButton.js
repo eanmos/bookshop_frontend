@@ -16,7 +16,7 @@ const Button = styled.button`
   text-transform: uppercase;
   margin-right: 8px;
   outline: none;
-
+ 
   &:hover {
     background: #ff8700;
     cursor: pointer;
@@ -25,7 +25,7 @@ const Button = styled.button`
   }
 `
 
-export default function AddToCartButton({ icon, bookId }) {
+export default function AddToCartButton({ setBookState, state, icon, bookId }) {
   const addToCart = () => {
     if (bookId === undefined || bookId === null)
       return
@@ -43,6 +43,8 @@ export default function AddToCartButton({ icon, bookId }) {
       draggable: true,
       progress: undefined,
     });
+
+    setBookState(!state)
   }
 
   if (icon)

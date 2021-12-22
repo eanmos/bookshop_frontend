@@ -3,6 +3,33 @@ import { Link } from "react-router-dom"
 import styled from 'styled-components'
 import AddToCartButton from "components/AddToCartButton"
 
+const GoCartLink = styled(Link)`
+  background: rgba(0, 0, 0, 0);
+  border: 1 px solid #c9c9c9;
+  box-shadow: none;
+  color: #595959;
+  filter: none;
+  font: "PT Sans";
+  font: 14px "PT Sans";
+  border-radius: 4px;
+  border: 1px solid #999;
+  padding: 4px 8px;
+  text-transform: uppercase;
+  margin-right: 8px;
+  outline: none;
+  text-decoration: none;
+  margin-top: 4px;
+  display: block;
+  width: fit-content;
+
+  &:hover {
+    background: rgb(6, 80, 194);
+    cursor: pointer;
+    color: white;
+    border: 1px solid rgb(6, 80, 194);
+  }
+`
+
 const Wrapper = styled.div`
   width: 180px;
 `
@@ -97,6 +124,8 @@ function OldPrice({ oldPrice }) {
 }
 
 export default function Book({ book }) {
+    let [state, setState] = React.useState(false)
+
     let { id, cover, price, currentPrice, oldPrice, discount, title, author } = book
 
     if (discount) {
@@ -106,6 +135,9 @@ export default function Book({ book }) {
       currentPrice = price
       oldPrice = null
     }
+
+    const getCartBookIdsCount = () => JSON.parse(localStorage.getItem('cart')) || []
+    const isBookInCart = getCartBookIdsCount().find((b) => b.id == id) !== undefined
 
     return (
       <Wrapper>
@@ -124,7 +156,15 @@ export default function Book({ book }) {
 
         <Author>{author}</Author>
 
-        <AddToCartButton bookId={id} />
+	{
+          (() => {
+	    if (!isBookInCart) {
+	      return <AddToCartButton setBookState={setState} state={state} bookId={id} />
+	    } else {
+	      return <GoCartLink to="/cart">ОФОРМИТЬ</GoCartLink>
+	    }
+	  })()
+	}
       </Wrapper>
     )
 }

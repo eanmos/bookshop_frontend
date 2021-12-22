@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import styled from 'styled-components'
 import Sidebar from "components/Sidebar"
@@ -88,6 +89,33 @@ const SecondaryInfoLineWrapper = styled.p`
   font-style: all-small-caps;
 `
 
+const GoCartLink = styled(Link)`
+  background: rgba(0, 0, 0, 0);
+  border: 1 px solid #c9c9c9;
+  box-shadow: none;
+  color: #595959;
+  filter: none;
+  font: "PT Sans";
+  font: 14px "PT Sans";
+  border-radius: 4px;
+  border: 1px solid #999;
+  padding: 4px 8px;
+  text-transform: uppercase;
+  margin-right: 8px;
+  outline: none;
+  text-decoration: none;
+  margin-top: 4px;
+  display: block;
+  width: fit-content;
+
+  &:hover {
+    background: rgb(6, 80, 194);
+    cursor: pointer;
+    color: white;
+    border: 1px solid rgb(6, 80, 194);
+  }
+`
+
 function SecondaryInfoLine({ name, value }) {
   if (value) {
     return (
@@ -121,6 +149,8 @@ function OldPrice({ oldPrice }) {
 }
 
 export default function BookPage(props) {
+    let [state, setState] = React.useState(false)
+
     const params = useParams()
     // eslint-disable-next-line
     const book = props.books.find((b) => b.id == params.bookId)
@@ -148,6 +178,9 @@ export default function BookPage(props) {
       oldPrice = null
     }
 
+    const getCartBookIdsCount = () => JSON.parse(localStorage.getItem('cart')) || []
+    const isBookInCart = getCartBookIdsCount().find((b) => b.id == id) !== undefined
+
     return (
       <Wrapper>
         <Sidebar />
@@ -163,7 +196,16 @@ export default function BookPage(props) {
 
             <DiscountBlock price={price} discount={discount} />
 
-            <AddToCartButton icon={true} bookId={id} />
+
+	{
+          (() => {
+	    if (!isBookInCart) {
+	      return <AddToCartButton setBookState={setState} state={state} icon={true} bookId={id} />
+	    } else {
+	      return <GoCartLink to="/cart">ОФОРМИТЬ</GoCartLink>
+	    }
+	  })()
+	}
           </CoverColumn>
 
           <InfoBlock>

@@ -42,6 +42,7 @@ const BookWrapper = styled.div`
   color: #393939;
   margin-bottom: 15px;
   box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.07);
+  max-width: 600px;
 `
 
 const Cover = styled.img`

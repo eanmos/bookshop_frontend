@@ -43,6 +43,24 @@ const TotalPriceLabel = styled.p`
 `
 
 export default function MakeOrderPanel({ books, totalPrice, setCartBooks, setTotalPrice }) {
+  const [userInfo, setUserInfo] = React.useState(null)
+
+  React.useEffect(() => {
+    const userInfo = async () => {
+      const response = await fetch("/userInfo")
+      const json = JSON.parse(await response.json())
+
+      if (json.success)
+        setUserInfo({ username: json.username, email: json.email })
+      else
+        setUserInfo(null)
+
+      console.log(json)
+    }
+
+    userInfo()
+  }, [])
+
   const getCartBookIdsCount = () => JSON.parse(localStorage.getItem('cart')) || []
   const getCartBooks = () => getCartBookIdsCount().map((e) => books.find((b) => b.id === e.id ))
   const getCartBookCountById = (id) => {
@@ -125,7 +143,13 @@ export default function MakeOrderPanel({ books, totalPrice, setCartBooks, setTot
   return (
     <Wrapper>
       <TotalPriceLabel>Заказ на сумму {totalPrice} ₽</TotalPriceLabel>
-      <MakeOrderButton onClick={makeOrder}>Оформить</MakeOrderButton>
+
+      {
+        (() => {
+	  if (userInfo)
+	    return <MakeOrderButton onClick={makeOrder}>Оформить</MakeOrderButton>
+	})()
+      }
     </Wrapper>
   )
 }

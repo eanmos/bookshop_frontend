@@ -57,7 +57,7 @@ export default function CartBookList({ books }) {
 
   return (
     <Wrapper>
-      <MakeOrderPanel books={cartBooks} totalPrice={totalPrice} />
+      <MakeOrderPanel setTotalPrice={setTotalPrice} setCartBooks={setCartBooks} books={cartBooks} totalPrice={totalPrice} />
       <BooksListInCart books={cartBooks} deleteBookHandler={deleteBookHandler} triggerCartTotalPriceUpdate={triggerCartTotalPriceUpdate} />
     </Wrapper>
   )

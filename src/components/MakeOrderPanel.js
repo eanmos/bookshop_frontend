@@ -42,7 +42,7 @@ const TotalPriceLabel = styled.p`
   color: #393939;
 `
 
-export default function MakeOrderPanel({ books, totalPrice }) {
+export default function MakeOrderPanel({ books, totalPrice, setCartBooks, setTotalPrice }) {
   const getCartBookIdsCount = () => JSON.parse(localStorage.getItem('cart')) || []
   const getCartBooks = () => getCartBookIdsCount().map((e) => books.find((b) => b.id === e.id ))
   const getCartBookCountById = (id) => {
@@ -78,25 +78,15 @@ export default function MakeOrderPanel({ books, totalPrice }) {
   const sendOrderToServer = async (order) => {
     let json
 
-    try {
-      const response = await fetch("/makeOrder", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(order)
-      })
-      json = JSON.parse(await response.json())
-    } catch (e) {
-      toast.error('Не получилось сделать заказ', {
-        position: "bottom-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    }
+    const response = await fetch("/makeOrder", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(order)
+    })
+
+    json = await response.json()
+    console.log(json)
 
     if (json.success) {
       toast.success('Заказ успешно создан 🥰', {
@@ -108,6 +98,14 @@ export default function MakeOrderPanel({ books, totalPrice }) {
         draggable: true,
         progress: undefined,
       })
+
+      setCartBooks([])
+      setTotalPrice(0)
+      localStorage.setItem('cart', JSON.stringify([]))
+      // Do client-side redirect after time-out so user can read the toast
+      const timeout = (delay) => new Promise(res => setTimeout(res, delay))
+      await timeout(1300)
+      window.location = "/profile"
     } else {
       toast.error('Не получилось сделать заказ', {
         position: "bottom-right",
